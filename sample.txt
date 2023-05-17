@@ -1,0 +1,52 @@
+# Set up the URL for Jose Ramirez's stats page on Baseball Reference
+    url = "https://www.baseball-reference.com/players/r/ramirjo01.shtml#all_batting_advanced"
+
+    # Make the request to the website
+    response = requests.get(url)
+
+    # Check if the request was successful
+    if response.status_code == 200:
+        # Parse the response data using BeautifulSoup
+        soup = BeautifulSoup(response.content, 'html.parser')
+        
+        # Find the table containing Jose Ramirez's standard batting stats
+        table = soup.find("table", {"id": "batting_standard"})
+        
+        # Find the row containing Jose Ramirez's stats from 2022
+        rows = table.find_all("tr")
+        for row in rows:
+            year = row.find("th", {"data-stat": "year_ID"})
+            if year and year.text == "2013":
+                jose_row = row
+                break
+        
+        # Extract Jose Ramirez's stats from the row
+        cols = jose_row.find_all("td")
+        jose_stats = {
+            "year": cols[0].text,
+            "age": cols[1].text,
+            "team": cols[2].text,
+            "games": cols[5].text,
+            "pa": cols[6].text,
+            "ab": cols[7].text,
+            "r": cols[8].text,
+            "h": cols[9].text,
+            "hr": cols[11].text,
+            "rbi": cols[12].text,
+            "sb": cols[13].text,
+            "cs": cols[14].text,
+            "bb": cols[15].text,
+            "so": cols[16].text,
+            "batting_avg": cols[17].text,
+            "onbase_pct": cols[18].text,
+            "slugging_pct": cols[19].text,
+            "ops": cols[20].text,
+            "ops_plus": cols[21].text,
+            "total_bases": cols[23].text,
+        }
+        
+        # Print Jose Ramirez's stats
+        print("Jose Ramirez's stats from 2022:")
+        print(jose_stats)
+    else:
+        print("Failed to get data from website. Status code:", response.status_code)
