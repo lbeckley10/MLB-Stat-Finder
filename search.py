@@ -140,16 +140,9 @@ class Search:
 
     #High Level function for finding the player's stats
     @staticmethod
-    def statSearch():
+    def statSearch(playerName, searchYear):
         pitching_stats = None
         hitting_stats = None
-
-        #Prompt user to search for a player
-        playerName = input("Enter a player: \n")
-
-        #Prompt user to enter a year
-        searchYear = str(input("What year?\n"))
-
 
         search_url = f"https://www.baseball-reference.com/search/search.fcgi?search={playerName}"
         response = requests.get(search_url)
@@ -175,11 +168,16 @@ class Search:
 
                 if pitching_stats:
                     # Print pitching stats
-                    print(f"{playerName}'s pitching stats from {searchYear}:")
-                    print(pitching_stats)
+                   # print(f"{playerName}'s pitching stats from {searchYear}:")
+                    #print(pitching_stats)
+                    pitching_stats["position"] = position
+                    return pitching_stats
                 if hitting_stats:
                     # Print hitting stats
-                    print(f"{playerName}'s batting stats from {searchYear}:")
-                    print(hitting_stats)
+                    #print(f"{playerName}'s batting stats from {searchYear}:")
+                    #print(hitting_stats)
+                    hitting_stats["position"] = position
+                    return hitting_stats
             else:
                 print("Failed to get data from website. Status code:", response.status_code)
+            return None
