@@ -53,12 +53,21 @@ class View:
         #Create frame that will contain stats
         self.statBox = tk.Frame()
         self.statBox.grid(column=0, row=5)
+        self.statArray = [[None for i in range(2)] for j in range(17)]
+        for i in range(17):
+            for j in range(2):
+                self.statArray[i][j] = tk.Label(self.statBox)
+                self.statArray[i][j].grid(column = i, row = j)
+
 
         self.root.update()
         
-        self.root.mainloop()
 
     #Method to set the controller attribute.
     #@param controller is a reference to a controller object
     def setController(self, controller):
         self.controller = controller
+        self.searchButton.config(command=self.controller.processClickEvent)
+        self.root.mainloop()
+
+    
