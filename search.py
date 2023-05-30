@@ -68,25 +68,25 @@ class Search:
             # Extract Player's stats from the row
             cols = player_row.find_all("td")
             player_stats = {
-                "age": cols[0].text,
-                "team": cols[1].text,
-                "games": cols[3].text,
-                "pa": cols[4].text,
-                "ab": cols[5].text,
-                "r": cols[6].text,
-                "h": cols[7].text,
-                "hr": cols[10].text,
-                "rbi": cols[11].text,
-                "sb": cols[12].text,
-                "cs": cols[13].text,
-                "bb": cols[14].text,
-                "so": cols[15].text,
-                "batting_avg": cols[16].text,
-                "onbase_pct": cols[17].text,
-                "slugging_pct": cols[18].text,
-                "ops": cols[19].text,
-                "ops_plus": cols[20].text,
-                "total_bases": cols[21].text,
+                "Age": cols[0].text,
+                "Team": cols[1].text,
+                "Games": cols[3].text,
+                "PA": cols[4].text,
+                "AB": cols[5].text,
+                "R": cols[6].text,
+                "H": cols[7].text,
+                "HR": cols[10].text,
+                "RBI": cols[11].text,
+                "SB": cols[12].text,
+                "CS": cols[13].text,
+                "BB": cols[14].text,
+                "SO": cols[15].text,
+                "BA": cols[16].text,
+                "OBP": cols[17].text,
+                "SLG": cols[18].text,
+                "OPS": cols[19].text,
+                "OPS+": cols[20].text,
+                "Total Bases": cols[21].text,
                 }
         else:
             print(f"No hitting stats found for {playerName} in {searchYear} \n")
@@ -117,26 +117,40 @@ class Search:
             # Extract Player's stats from the row
             cols = player_row.find_all("td")
             player_stats = {
-                "age": cols[0].text,
-                "team": cols[1].text,
-                "wins": cols[3].text,
-                "losses": cols[4].text,
-                "w-l%": cols[5].text,
-                "era": cols[6].text,
-                "games": cols[7].text,
-                "starts": cols[8].text,
-                "saves": cols[12].text,
-                "innings pitches": cols[13].text,
-                "hits": cols[14].text,
-                "runs": cols[15].text,
-                "earned runs": cols[16].text,
-                "hr": cols[17].text,
+                "Age": cols[0].text,
+                "Team": cols[1].text,
+                "Wins": cols[3].text,
+                "Losses": cols[4].text,
+                "W-L%": cols[5].text,
+                "ERA": cols[6].text,
+                "Games": cols[7].text,
+                "Starts": cols[8].text,
+                "Saves": cols[12].text,
+                "Innings Pitched": cols[13].text,
+                "Hits": cols[14].text,
+                "Runs": cols[15].text,
+                "Earned Runs": cols[16].text,
+                "HR": cols[17].text,
                 "BB": cols[18].text,
-                "strikeouts": cols[20].text
+                "Strikeouts": cols[20].text
                 }
         else:
             print(f"No pitching stats found for {playerName} in {searchYear} \n")
         return player_stats
+
+    #Get the player's image file
+    @staticmethod
+    def __getImage(response):
+        # Parse the response data using BeautifulSoup
+        parsedData = BeautifulSoup(response.content, 'html.parser')
+        
+        image_url = parsedData.find("img")["src"]
+        print(image_url)
+        image_data = requests.get(image_url).content
+
+        with open('image.jpg', 'wb') as f:
+            f.write(image_data)
+            f.close
 
     #High Level function for finding the player's stats
     @staticmethod
@@ -158,6 +172,9 @@ class Search:
 
             # Check if the request was successful
             if response.status_code == 200:
+                #Get image
+                Search.__getImage(response)
+
                 #Get position
                 position = Search.__findPlayerPosition(response)
                 position = position.lower()
@@ -170,13 +187,13 @@ class Search:
                     # Print pitching stats
                    # print(f"{playerName}'s pitching stats from {searchYear}:")
                     #print(pitching_stats)
-                    pitching_stats["position"] = position
+                    pitching_stats["Position"] = position.title()
                     return pitching_stats
                 if hitting_stats:
                     # Print hitting stats
                     #print(f"{playerName}'s batting stats from {searchYear}:")
                     #print(hitting_stats)
-                    hitting_stats["position"] = position
+                    hitting_stats["Position"] = position.title()
                     return hitting_stats
             else:
                 print("Failed to get data from website. Status code:", response.status_code)

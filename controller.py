@@ -34,9 +34,8 @@ class Controller:
         self.view.positionLabel.config(text=f"Position: {self.model.position}")
         keys = list(self.model.stats.keys())
         for i in range(17):
-            print(keys[i])
-            self.view.statBox[0][i].config(text= str(keys[i]))
-            self.view.statBox[1][i].config(text= str(self.model.stats.get(keys[i])))
+            self.view.statArray[i][0].config(text= keys[i])
+            self.view.statArray[i][1].config(text= self.model.stats.get(keys[i]))
         self.view.root.update()
 
     #Conducts search and updates model when the button is clicked
@@ -44,6 +43,5 @@ class Controller:
         self.updatePlayerBox(self.view.playerSearch.get())
         self.updateYearBox(self.view.yearSearch.get())
         self.updateStats(Search.statSearch(self.model.playerBox, self.model.yearBox))
-        print(type(self.model.stats))
-        self.updateInfo(self.model.playerBox, self.model.stats.get("team"), self.model.stats.get("age"), self.model.stats.get("position"))
+        self.updateInfo(self.model.playerBox, self.model.stats.get("Team"), self.model.stats.get("Age"), self.model.stats.get("Position"))
         self.updateView()

@@ -29,7 +29,7 @@ class View:
         self.yearSearch.grid(column=0,row=3, padx= 10)
 
         self.searchButton = tk.Button(self.root, width=int(self.root.winfo_width()/50), text="Search")
-        self.searchButton.grid(column=2, row=1)
+        self.searchButton.grid(column=1, row=1)
 
         self.imagePanel = tk.Label(text="IMAGE PLACEHOLDER")
         self.imagePanel.grid(column=0, row=4)
