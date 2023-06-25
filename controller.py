@@ -1,6 +1,8 @@
 from model import Model
 from view import *
 from search import *
+from PIL import Image, ImageTk
+
 
 class Controller:
     def __init__(self, view, model):
@@ -26,12 +28,18 @@ class Controller:
     def updateStats(self, stats):
         self.model.stats = stats
     
+    #Updates the image attribute of the model
+    def updateImage(self):
+        self.model.playerImage = ImageTk.PhotoImage(Image.open("./image.jpg"))
+         
+
     #Updates the view to match the model
     def updateView(self):
         self.view.nameLabel.config(text= f"Name: {self.model.name}")
         self.view.ageLabel.config(text=f"Age: {self.model.age}")
         self.view.teamLabel.config(text=f"Team: {self.model.team}")
         self.view.positionLabel.config(text=f"Position: {self.model.position}")
+        self.view.imagePanel.config(image= self.model.playerImage)
         keys = list(self.model.stats.keys())
         for i in range(17):
             self.view.statArray[i][0].config(text= keys[i])
@@ -44,4 +52,5 @@ class Controller:
         self.updateYearBox(self.view.yearSearch.get())
         self.updateStats(Search.statSearch(self.model.playerBox, self.model.yearBox))
         self.updateInfo(self.model.playerBox, self.model.stats.get("Team"), self.model.stats.get("Age"), self.model.stats.get("Position"))
+        self.updateImage()
         self.updateView()

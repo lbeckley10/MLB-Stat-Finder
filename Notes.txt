@@ -1,1 +1,2 @@
-Investigate table id="div_pitching_standard" for players that both pitch and hit
+1. Investigate table id="div_pitching_standard" for players that both pitch and hit
+2. Get photo data from website and display it
