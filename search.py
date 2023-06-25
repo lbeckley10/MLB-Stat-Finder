@@ -144,12 +144,16 @@ class Search:
         # Parse the response data using BeautifulSoup
         parsedData = BeautifulSoup(response.content, 'html.parser')
         
-        image_url = parsedData.find("img")["src"]
-        print(image_url)
-        image_data = requests.get(image_url).content
+        images = parsedData.findAll("img")
+        for image in images:
+            imageUrl = image["src"]
+            if "headshot" in imageUrl:
+                break
+        
+        imageData = requests.get(imageUrl).content
 
         with open('image.jpg', 'wb') as f:
-            f.write(image_data)
+            f.write(imageData)
             f.close
 
     #High Level function for finding the player's stats
@@ -176,24 +180,17 @@ class Search:
                 Search.__getImage(response)
 
                 #Get position
-                position = Search.__findPlayerPosition(response)
-                position = position.lower()
+                position = Search.__findPlayerPosition(response).title()
 
-                if(position.__contains__("pitcher")):
+                if(position.__contains__("Pitcher")):
                     pitching_stats = Search.__parsePitcherStats(response, playerName, searchYear)    
                 hitting_stats = Search.__parseHitterStats(response, playerName, searchYear)
 
                 if pitching_stats:
-                    # Print pitching stats
-                   # print(f"{playerName}'s pitching stats from {searchYear}:")
-                    #print(pitching_stats)
-                    pitching_stats["Position"] = position.title()
+                    pitching_stats["Position"] = position
                     return pitching_stats
                 if hitting_stats:
-                    # Print hitting stats
-                    #print(f"{playerName}'s batting stats from {searchYear}:")
-                    #print(hitting_stats)
-                    hitting_stats["Position"] = position.title()
+                    hitting_stats["Position"] = position
                     return hitting_stats
             else:
                 print("Failed to get data from website. Status code:", response.status_code)
